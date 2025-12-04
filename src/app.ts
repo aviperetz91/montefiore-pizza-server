@@ -3,6 +3,7 @@ import cookieParser from 'cookie-parser';
 import connectDB from './utils/db';
 import env from './utils/env';
 import { errorHandler } from './middleware/errorHandler';
+import authRoutes from './routes/auth/authRoutes';
 
 const app = express();
 const PORT = env.PORT || 8000;
@@ -12,12 +13,14 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
 
-// Basic route
+// Routes
 app.get('/health', (_req: Request, res: Response): void => {
   res.status(200).json({ status: 'ok', message: 'Montefiore Pizza Server is running' });
 });
 
-// Error handling middleware
+app.use('/api/v1/auth', authRoutes);
+
+// Error handling middleware (must be last)
 app.use(errorHandler);
 
 // Start server
